@@ -9,11 +9,13 @@ public class PlayerControllerX : MonoBehaviour
     public float floatForce;
     private float gravityModifier = 1.5f;
     private float upperBound = 15f;
-    private Rigidbody playerRb;
-
+    private Rigidbody playerRb; // Physics Variables
+    
+    //particle system variables 
     public ParticleSystem explosionParticle;
     public ParticleSystem fireworksParticle;
 
+    // Sound variables
     private AudioSource playerAudio;
     public AudioClip moneySound;
     public AudioClip explodeSound;
@@ -71,6 +73,7 @@ public class PlayerControllerX : MonoBehaviour
         if (other.gameObject.CompareTag("Ground"))
         {
              playerRb.velocity = new Vector3(0,playerRb.velocity.y * (-1), 0);
+             //Play the sound once the ballon touches the ground
              playerAudio.PlayOneShot(bounceSound, 1.0f);
 
         }
