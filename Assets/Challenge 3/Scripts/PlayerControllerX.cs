@@ -8,8 +8,8 @@ public class PlayerControllerX : MonoBehaviour
 
     public float floatForce;
     private float gravityModifier = 1.5f;
+    private float upperBound = 15f;
     private Rigidbody playerRb;
-    
 
     public ParticleSystem explosionParticle;
     public ParticleSystem fireworksParticle;
@@ -35,14 +35,17 @@ public class PlayerControllerX : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        bool isHighEnough = (transform.position.y > 20.0f);
-        if (isHighEnough) playerRb.velocity = Vector3.zero;
-
         // While space is pressed and player is low enough, float up
-        if (Input.GetKey(KeyCode.Space) && !gameOver && isHighEnough)
+        if (Input.GetKey(KeyCode.Space) && !gameOver && transform.position.y <= upperBound)
         {
             playerRb.AddForce(Vector3.up * floatForce * Time.deltaTime, ForceMode.Impulse);
         }
+        if (transform.position.y > upperBound)
+        {
+            playerRb.velocity = Vector3.zero;
+            playerRb.AddForce(Vector3.down * floatForce * Time.deltaTime, ForceMode.Impulse);
+        }
+       
     }
 
     private void OnCollisionEnter(Collision other)
@@ -65,12 +68,12 @@ public class PlayerControllerX : MonoBehaviour
             Destroy(other.gameObject);
         }
         //if the player collides with the ground,
-        /*if (other.gameObject.CompareTag("Ground"))
+        if (other.gameObject.CompareTag("Ground"))
         {
-             playerRb.velocity = new Vector3(0,playerRb.velocity.y *(-1), 0);
+             playerRb.velocity = new Vector3(0,playerRb.velocity.y * (-1), 0);
              playerAudio.PlayOneShot(bounceSound, 1.0f);
 
-        }*/
+        }
        
 
     }
